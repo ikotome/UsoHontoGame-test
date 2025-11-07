@@ -24,6 +24,7 @@ export function JoinPage({ sessionId }: JoinPageProps) {
     setMode,
     handleCreateSession,
     handleJoinSession,
+    clearError,
   } = useJoinPage({ sessionId });
 
   return (
@@ -68,10 +69,18 @@ export function JoinPage({ sessionId }: JoinPageProps) {
               <Input
                 id="sessionId"
                 value={joinSessionId}
-                onChange={(e) => setJoinSessionId(e.target.value.toUpperCase())}
+                onChange={(e) => {
+                  setJoinSessionId(e.target.value.toUpperCase());
+                  if (error) clearError();
+                }}
                 placeholder="ABC123"
                 disabled={isLoading}
                 maxLength={6}
+                error={
+                  error && mode === 'join' && !joinSessionId.trim()
+                    ? 'セッションIDを入力してください'
+                    : undefined
+                }
               />
             </div>
           )}
@@ -83,9 +92,13 @@ export function JoinPage({ sessionId }: JoinPageProps) {
             <Input
               id="nickname"
               value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              onChange={(e) => {
+                setNickname(e.target.value);
+                if (error) clearError();
+              }}
               placeholder="あなたの名前"
               disabled={isLoading}
+              error={error && !nickname.trim() ? 'ニックネームを入力してください' : undefined}
             />
           </div>
 
