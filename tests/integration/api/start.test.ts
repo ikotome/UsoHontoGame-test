@@ -70,7 +70,7 @@ describe('POST /api/sessions/[id]/start', () => {
     // Create teams and assign participants
     const team1Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team A',
       },
@@ -80,23 +80,34 @@ describe('POST /api/sessions/[id]/start', () => {
 
     const team2Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team B',
       },
     });
-    await teamsPUT(team2Request, { params: { id: testSessionId } });
+    const team2Response = await teamsPUT(team2Request, { params: { id: testSessionId } });
+    const team2Data = await parseResponse(team2Response);
 
     // Assign participants to teams
-    const assignRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+    const assign1Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'ASSIGN_PARTICIPANT',
+        action: 'assign',
         hostId: testHostId,
         participantId: p1Data.participantId,
-        teamId: team1Data.teamId,
+        teamId: team1Data.team.id,
       },
     });
-    await teamsPUT(assignRequest, { params: { id: testSessionId } });
+    await teamsPUT(assign1Request, { params: { id: testSessionId } });
+
+    const assign2Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'assign',
+        hostId: testHostId,
+        participantId: p2Data.participantId,
+        teamId: team2Data.team.id,
+      },
+    });
+    await teamsPUT(assign2Request, { params: { id: testSessionId } });
 
     // Start game
     const startRequest = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/start`, {
@@ -106,7 +117,8 @@ describe('POST /api/sessions/[id]/start', () => {
     const data = await parseResponse(response);
 
     expect(response.status).toBe(200);
-    expect(data).toHaveProperty('sessionId');
+    expect(data).toHaveProperty('success');
+    expect(data.success).toBe(true);
     expect(data).toHaveProperty('phase');
     expect(data.phase).toBe('presentation');
   });
@@ -135,14 +147,20 @@ describe('POST /api/sessions/[id]/start', () => {
   });
 
   it('should return 400 when game already started', async () => {
-    // Create minimal setup and start game once
+    // Create minimal setup with 2 teams and start game once
     const p1Request = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/join`, {
       body: { nickname: 'Player1' },
     });
     const p1Response = await joinPOST(p1Request, { params: { id: testSessionId } });
     const p1Data = await parseResponse(p1Response);
 
-    const epRequest = createMockRequest('POST', 'http://localhost:3000/api/episodes', {
+    const p2Request = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/join`, {
+      body: { nickname: 'Player2' },
+    });
+    const p2Response = await joinPOST(p2Request, { params: { id: testSessionId } });
+    const p2Data = await parseResponse(p2Response);
+
+    const ep1Request = createMockRequest('POST', 'http://localhost:3000/api/episodes', {
       body: {
         participantId: p1Data.participantId,
         episodes: [
@@ -152,27 +170,59 @@ describe('POST /api/sessions/[id]/start', () => {
         ],
       },
     });
-    await episodesPOST(epRequest);
+    await episodesPOST(ep1Request);
 
-    const teamRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+    const ep2Request = createMockRequest('POST', 'http://localhost:3000/api/episodes', {
       body: {
-        action: 'CREATE_TEAM',
+        participantId: p2Data.participantId,
+        episodes: [
+          { text: 'Episode A is true.', isLie: false },
+          { text: 'Episode B is true.', isLie: false },
+          { text: 'Episode C is a lie.', isLie: true },
+        ],
+      },
+    });
+    await episodesPOST(ep2Request);
+
+    const team1Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team A',
       },
     });
-    const teamResponse = await teamsPUT(teamRequest, { params: { id: testSessionId } });
-    const teamData = await parseResponse(teamResponse);
+    const team1Response = await teamsPUT(team1Request, { params: { id: testSessionId } });
+    const team1Data = await parseResponse(team1Response);
 
-    const assignRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+    const team2Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'ASSIGN_PARTICIPANT',
+        action: 'create',
         hostId: testHostId,
-        participantId: p1Data.participantId,
-        teamId: teamData.teamId,
+        teamName: 'Team B',
       },
     });
-    await teamsPUT(assignRequest, { params: { id: testSessionId } });
+    const team2Response = await teamsPUT(team2Request, { params: { id: testSessionId } });
+    const team2Data = await parseResponse(team2Response);
+
+    const assign1Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'assign',
+        hostId: testHostId,
+        participantId: p1Data.participantId,
+        teamId: team1Data.team.id,
+      },
+    });
+    await teamsPUT(assign1Request, { params: { id: testSessionId } });
+
+    const assign2Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'assign',
+        hostId: testHostId,
+        participantId: p2Data.participantId,
+        teamId: team2Data.team.id,
+      },
+    });
+    await teamsPUT(assign2Request, { params: { id: testSessionId } });
 
     // Start game first time
     const startRequest1 = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/start`, {
@@ -205,34 +255,73 @@ describe('POST /api/sessions/[id]/start', () => {
   });
 
   it('should return 400 when participants have not registered episodes', async () => {
-    // Create participant without episodes
+    // Create 2 participants without episodes for one of them
     const p1Request = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/join`, {
       body: { nickname: 'Player1' },
     });
     const p1Response = await joinPOST(p1Request, { params: { id: testSessionId } });
     const p1Data = await parseResponse(p1Response);
 
-    // Create team
-    const teamRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+    const p2Request = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/join`, {
+      body: { nickname: 'Player2' },
+    });
+    const p2Response = await joinPOST(p2Request, { params: { id: testSessionId } });
+    const p2Data = await parseResponse(p2Response);
+
+    // Only register episodes for p2
+    const ep2Request = createMockRequest('POST', 'http://localhost:3000/api/episodes', {
       body: {
-        action: 'CREATE_TEAM',
+        participantId: p2Data.participantId,
+        episodes: [
+          { text: 'Episode A is true.', isLie: false },
+          { text: 'Episode B is true.', isLie: false },
+          { text: 'Episode C is a lie.', isLie: true },
+        ],
+      },
+    });
+    await episodesPOST(ep2Request);
+
+    // Create 2 teams
+    const team1Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team A',
       },
     });
-    const teamResponse = await teamsPUT(teamRequest, { params: { id: testSessionId } });
-    const teamData = await parseResponse(teamResponse);
+    const team1Response = await teamsPUT(team1Request, { params: { id: testSessionId } });
+    const team1Data = await parseResponse(team1Response);
 
-    // Assign participant
-    const assignRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+    const team2Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'ASSIGN_PARTICIPANT',
+        action: 'create',
         hostId: testHostId,
-        participantId: p1Data.participantId,
-        teamId: teamData.teamId,
+        teamName: 'Team B',
       },
     });
-    await teamsPUT(assignRequest, { params: { id: testSessionId } });
+    const team2Response = await teamsPUT(team2Request, { params: { id: testSessionId } });
+    const team2Data = await parseResponse(team2Response);
+
+    // Assign participants to teams
+    const assign1Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'assign',
+        hostId: testHostId,
+        participantId: p1Data.participantId,
+        teamId: team1Data.team.id,
+      },
+    });
+    await teamsPUT(assign1Request, { params: { id: testSessionId } });
+
+    const assign2Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'assign',
+        hostId: testHostId,
+        participantId: p2Data.participantId,
+        teamId: team2Data.team.id,
+      },
+    });
+    await teamsPUT(assign2Request, { params: { id: testSessionId } });
 
     const startRequest = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/start`, {
       body: { hostId: testHostId },
@@ -246,14 +335,20 @@ describe('POST /api/sessions/[id]/start', () => {
   });
 
   it('should return 400 when there are unassigned participants', async () => {
-    // Create participant but don't assign to team
+    // Create 2 participants with episodes but don't assign one to a team
     const p1Request = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/join`, {
       body: { nickname: 'Player1' },
     });
     const p1Response = await joinPOST(p1Request, { params: { id: testSessionId } });
     const p1Data = await parseResponse(p1Response);
 
-    const epRequest = createMockRequest('POST', 'http://localhost:3000/api/episodes', {
+    const p2Request = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/join`, {
+      body: { nickname: 'Player2' },
+    });
+    const p2Response = await joinPOST(p2Request, { params: { id: testSessionId } });
+    const p2Data = await parseResponse(p2Response);
+
+    const ep1Request = createMockRequest('POST', 'http://localhost:3000/api/episodes', {
       body: {
         participantId: p1Data.participantId,
         episodes: [
@@ -263,17 +358,50 @@ describe('POST /api/sessions/[id]/start', () => {
         ],
       },
     });
-    await episodesPOST(epRequest);
+    await episodesPOST(ep1Request);
 
-    // Create team but don't assign participant
-    const teamRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+    const ep2Request = createMockRequest('POST', 'http://localhost:3000/api/episodes', {
       body: {
-        action: 'CREATE_TEAM',
+        participantId: p2Data.participantId,
+        episodes: [
+          { text: 'Episode A is true.', isLie: false },
+          { text: 'Episode B is true.', isLie: false },
+          { text: 'Episode C is a lie.', isLie: true },
+        ],
+      },
+    });
+    await episodesPOST(ep2Request);
+
+    // Create 2 teams
+    const team1Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team A',
       },
     });
-    await teamsPUT(teamRequest, { params: { id: testSessionId } });
+    const team1Response = await teamsPUT(team1Request, { params: { id: testSessionId } });
+    const team1Data = await parseResponse(team1Response);
+
+    const team2Request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'create',
+        hostId: testHostId,
+        teamName: 'Team B',
+      },
+    });
+    await teamsPUT(team2Request, { params: { id: testSessionId } });
+
+    // Only assign p1 to a team, leave p2 unassigned
+    const assignRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
+      body: {
+        action: 'assign',
+        hostId: testHostId,
+        participantId: p1Data.participantId,
+        teamId: team1Data.team.id,
+      },
+    });
+    await teamsPUT(assignRequest, { params: { id: testSessionId } });
 
     const startRequest = createMockRequest('POST', `http://localhost:3000/api/sessions/${testSessionId}/start`, {
       body: { hostId: testHostId },

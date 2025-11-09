@@ -33,9 +33,10 @@ describe('POST /api/sessions/[id]/end', () => {
     const data = await parseResponse(response);
 
     expect(response.status).toBe(200);
-    expect(data).toHaveProperty('sessionId');
+    expect(data).toHaveProperty('success');
+    expect(data.success).toBe(true);
     expect(data).toHaveProperty('phase');
-    expect(data.phase).toBe('finished');
+    expect(data.phase).toBe('completed');
   });
 
   it('should return 404 for non-existent session', async () => {
@@ -73,7 +74,8 @@ describe('POST /api/sessions/[id]/end', () => {
     const data = await parseResponse(response);
 
     expect(response.status).toBe(200);
-    expect(data).toHaveProperty('teams');
+    expect(data).toHaveProperty('success');
+    expect(data.success).toBe(true);
   });
 
   it('should determine winner based on final scores', async () => {

@@ -38,7 +38,7 @@ describe('PUT /api/sessions/[id]/teams', () => {
   it('should create a new team', async () => {
     const request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team Alpha',
       },
@@ -47,54 +47,64 @@ describe('PUT /api/sessions/[id]/teams', () => {
     const data = await parseResponse(response);
 
     expect(response.status).toBe(200);
-    expect(data).toHaveProperty('teamId');
-    expect(data).toHaveProperty('teamName');
-    expect(data.teamName).toBe('Team Alpha');
+    expect(data).toHaveProperty('success');
+    expect(data.success).toBe(true);
+    expect(data).toHaveProperty('team');
+    expect(data.team).toHaveProperty('id');
+    expect(data.team).toHaveProperty('name');
+    expect(data.team).toHaveProperty('participantIds');
+    expect(data.team).toHaveProperty('cumulativeScore');
+    expect(data.team.name).toBe('Team Alpha');
   });
 
   it('should assign participant to team', async () => {
     // First create a team
     const createRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team Alpha',
       },
     });
     const createResponse = await teamsPUT(createRequest, { params: { id: testSessionId } });
     const createData = await parseResponse(createResponse);
-    const teamId = createData.teamId;
+    const teamId = createData.team.id;
 
     // Assign participant to team
     const request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'ASSIGN_PARTICIPANT',
+        action: 'assign',
         hostId: testHostId,
         participantId: testParticipantId,
         teamId,
       },
     });
     const response = await teamsPUT(request, { params: { id: testSessionId } });
+    const data = await parseResponse(response);
 
     expect(response.status).toBe(200);
+    expect(data).toHaveProperty('success');
+    expect(data.success).toBe(true);
+    expect(data).toHaveProperty('team');
+    expect(data.team.participantIds).toContain(testParticipantId);
   });
 
   it('should remove participant from team', async () => {
     // Create team and assign participant
     const createRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team Alpha',
       },
     });
     const createResponse = await teamsPUT(createRequest, { params: { id: testSessionId } });
     const createData = await parseResponse(createResponse);
-    const teamId = createData.teamId;
+    const teamId = createData.team.id;
 
     const assignRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'ASSIGN_PARTICIPANT',
+        action: 'assign',
         hostId: testHostId,
         participantId: testParticipantId,
         teamId,
@@ -105,46 +115,52 @@ describe('PUT /api/sessions/[id]/teams', () => {
     // Remove participant
     const request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'REMOVE_PARTICIPANT',
+        action: 'remove',
         hostId: testHostId,
         participantId: testParticipantId,
       },
     });
     const response = await teamsPUT(request, { params: { id: testSessionId } });
+    const data = await parseResponse(response);
 
     expect(response.status).toBe(200);
+    expect(data).toHaveProperty('success');
+    expect(data.success).toBe(true);
   });
 
   it('should delete team', async () => {
     // Create a team
     const createRequest = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team Alpha',
       },
     });
     const createResponse = await teamsPUT(createRequest, { params: { id: testSessionId } });
     const createData = await parseResponse(createResponse);
-    const teamId = createData.teamId;
+    const teamId = createData.team.id;
 
     // Delete team
     const request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'DELETE_TEAM',
+        action: 'delete',
         hostId: testHostId,
         teamId,
       },
     });
     const response = await teamsPUT(request, { params: { id: testSessionId } });
+    const data = await parseResponse(response);
 
     expect(response.status).toBe(200);
+    expect(data).toHaveProperty('success');
+    expect(data.success).toBe(true);
   });
 
   it('should return error when session not found', async () => {
     const request = createMockRequest('PUT', 'http://localhost:3000/api/sessions/INVALID/teams', {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team Alpha',
       },
@@ -157,7 +173,7 @@ describe('PUT /api/sessions/[id]/teams', () => {
   it('should return error when non-host tries to manage teams', async () => {
     const request = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: 'invalid-host-id',
         teamName: 'Team Alpha',
       },
@@ -171,7 +187,7 @@ describe('PUT /api/sessions/[id]/teams', () => {
     // Create first team
     const createRequest1 = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team Alpha',
       },
@@ -181,7 +197,7 @@ describe('PUT /api/sessions/[id]/teams', () => {
     // Try to create team with same name
     const createRequest2 = createMockRequest('PUT', `http://localhost:3000/api/sessions/${testSessionId}/teams`, {
       body: {
-        action: 'CREATE_TEAM',
+        action: 'create',
         hostId: testHostId,
         teamName: 'Team Alpha',
       },

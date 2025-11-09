@@ -89,7 +89,7 @@ describe('POST /api/votes', () => {
     const response = await votesPOST(request);
     const data = await parseResponse(response);
 
-    expect([422, 500]).toContain(response.status);
+    expect(response.status).toBe(400);
     expect(data).toHaveProperty('error');
   });
 
