@@ -22,7 +22,7 @@ export interface GameResults {
   performances?: Record<string, TeamPerformance>;
 }
 
-interface UseResultsReturn {
+export interface UseResultsReturn {
   isLoading: boolean;
   results: GameResults | null;
   error: string | null;
