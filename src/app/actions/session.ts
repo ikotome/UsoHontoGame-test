@@ -70,22 +70,12 @@ export async function createSessionAction(): Promise<CreateSessionResult> {
  */
 export async function setNicknameAction(nickname: string): Promise<SetNicknameResult> {
   try {
-    // Get current session ID from cookie
-    const sessionId = await getCookie(COOKIE_NAMES.SESSION_ID);
+    const createSessionUseCase = new CreateSession(sessionRepository);
+    const session = await createSessionUseCase.execute();
 
-    if (!sessionId) {
-      return {
-        success: false,
-        error: {
-          code: 'NO_SESSION',
-          message: 'セッションが見つかりません',
-        },
-      };
-    }
-
-    // Execute use case
+      // Execute use case
     const useCase = new SetNickname(sessionRepository);
-    const result = await useCase.execute(sessionId, nickname);
+    const result = await useCase.execute(session.sessionId, nickname);
 
     if (!result) {
       return {
