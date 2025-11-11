@@ -10,6 +10,8 @@ import { CreateGame } from "@/server/application/use-cases/games/CreateGame";
 import { createGameRepository } from "@/server/infrastructure/repositories";
 import { CreateGameSchema } from "@/server/domain/schemas/gameSchemas";
 import type { CreateGameOutput } from "@/server/application/dto/GameDto";
+import {getCookie} from "@/lib/cookies";
+import {COOKIE_NAMES} from "@/lib/constants";
 
 /**
  * Server Action: Create new game
@@ -40,8 +42,7 @@ export async function createGameAction(
 		}
 
 		// Get session ID from cookies (moderator/creator ID)
-		const cookieStore = await cookies();
-		const sessionId = cookieStore.get("session_id")?.value;
+        const sessionId = await getCookie(COOKIE_NAMES.SESSION_ID);
 
 		if (!sessionId) {
 			return {
@@ -92,7 +93,7 @@ export async function createGameAndRedirect(
 
 	if (result.success) {
 		// Redirect to game list or game detail page
-		redirect("/top");
+		redirect("/");
 	}
 
 	// On failure, let the form component handle errors

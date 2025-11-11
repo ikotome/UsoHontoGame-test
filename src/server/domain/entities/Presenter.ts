@@ -62,6 +62,28 @@ export class Presenter {
 	}
 
 	/**
+	 * Creates an incomplete Presenter without episode validation
+	 * Used during the initial presenter creation phase before episodes are added
+	 * @param props Presenter properties (episodes can be 0-2 initially)
+	 * @throws ValidationError if nickname is empty
+	 */
+	static createIncomplete(props: PresenterProps): Presenter {
+		// Validate nickname
+		if (props.nickname.trim().length === 0) {
+			throw new ValidationError("Presenter nickname cannot be empty");
+		}
+
+		// Allow any number of episodes (0-3) for incomplete presenters
+		if (props.episodes.length > 3) {
+			throw new ValidationError(
+				`Presenter cannot have more than 3 episodes (has ${props.episodes.length})`,
+			);
+		}
+
+		return new Presenter(props);
+	}
+
+	/**
 	 * Gets the presenter ID
 	 */
 	get id(): string {

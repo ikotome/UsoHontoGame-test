@@ -141,13 +141,13 @@ This document provides a complete, dependency-ordered task list for implementing
 
 ### Application Layer
 
-- [ ] T040 [US2] Create PresenterWithLieDto type in `src/server/application/dto/PresenterWithLieDto.ts`
-- [ ] T041 [US2] Create EpisodeWithLieDto type in `src/server/application/dto/EpisodeWithLieDto.ts`
-- [ ] T042 [US2] Create EpisodeDto (public, no isLie) type in `src/server/application/dto/EpisodeDto.ts`
-- [ ] T043 [US2] Implement AddPresenter use case with nickname lookup validation (throw NotFoundError if nickname doesn't exist in session system) in `src/server/application/use-cases/games/AddPresenter.ts`
-- [ ] T044 [US2] Implement RemovePresenter use case in `src/server/application/use-cases/games/RemovePresenter.ts`
-- [ ] T045 [US2] Implement AddEpisode use case with lie marker validation in `src/server/application/use-cases/games/AddEpisode.ts`
-- [ ] T046 [US2] Implement GetPresenterEpisodes use case (with access control) in `src/server/application/use-cases/games/GetPresenterEpisodes.ts`
+- [X] T040 [US2] Create PresenterWithLieDto type in `src/server/application/dto/PresenterWithLieDto.ts`
+- [X] T041 [US2] Create EpisodeWithLieDto type in `src/server/application/dto/EpisodeWithLieDto.ts`
+- [X] T042 [US2] Create EpisodeDto (public, no isLie) type in `src/server/application/dto/EpisodeDto.ts`
+- [X] T043 [US2] Implement AddPresenter use case with nickname lookup validation (throw NotFoundError if nickname doesn't exist in session system) in `src/server/application/use-cases/games/AddPresenter.ts`
+- [X] T044 [US2] Implement RemovePresenter use case in `src/server/application/use-cases/games/RemovePresenter.ts`
+- [X] T045 [US2] Implement AddEpisode use case with lie marker validation in `src/server/application/use-cases/games/AddEpisode.ts`
+- [X] T046 [US2] Implement GetPresenterEpisodes use case (with access control) in `src/server/application/use-cases/games/GetPresenterEpisodes.ts`
 - [ ] T047 [P] [US2] Write unit tests for AddPresenter (including NotFoundError for invalid nickname) in `tests/unit/use-cases/AddPresenter.test.ts`
 - [ ] T048 [P] [US2] Write unit tests for AddEpisode in `tests/unit/use-cases/AddEpisode.test.ts`
 
