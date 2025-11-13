@@ -57,12 +57,20 @@ export function PresenterManagementPage({
 					<p className="mt-2 text-gray-600">
 						プレゼンターを追加し、それぞれに3つのエピソード（2つのホント、1つのウソ）を登録してください。
 					</p>
-					<a
-						href="/top"
-						className="mt-4 inline-block text-sm text-blue-600 hover:text-blue-700"
-					>
-						← TOPページに戻る
-					</a>
+					<div className="mt-4 flex gap-4">
+						<a
+							href={`/games/${gameId}`}
+							className="inline-block text-sm text-blue-600 hover:text-blue-700"
+						>
+							← ゲーム詳細に戻る
+						</a>
+						<a
+							href="/top"
+							className="inline-block text-sm text-gray-600 hover:text-gray-900"
+						>
+							← TOPページに戻る
+						</a>
+					</div>
 				</div>
 
 				{/* Error Message */}

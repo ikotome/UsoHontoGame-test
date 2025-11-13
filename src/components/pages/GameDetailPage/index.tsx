@@ -96,6 +96,22 @@ export function GameDetailPage({ game }: GameDetailPageProps) {
 				</dl>
 			</div>
 
+			{/* Presenter Management Section */}
+			<div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+				<h2 className="mb-4 text-xl font-semibold text-gray-900">
+					プレゼンター管理
+				</h2>
+				<p className="mb-4 text-sm text-gray-600">
+					プレゼンターとエピソードを管理します。各プレゼンターに3つのエピソード（2つのホント、1つのウソ）を登録してください。
+				</p>
+				<a
+					href={`/games/${game.id}/presenters`}
+					className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+				>
+					プレゼンター管理ページへ →
+				</a>
+			</div>
+
 			{/* Edit Form (only shown when status is 準備中) */}
 			{canEdit && (
 				<div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
