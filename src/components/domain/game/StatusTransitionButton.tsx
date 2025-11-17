@@ -47,10 +47,13 @@ export function StatusTransitionButton({
         onSuccess?.('出題中');
       } else {
         const errorMessage = result.errors._form?.[0] || 'ゲームの開始に失敗しました';
+        alert(errorMessage);
         onError?.(errorMessage);
       }
     } catch (error) {
-      onError?.(error instanceof Error ? error.message : 'ゲームの開始に失敗しました');
+      const errorMessage = error instanceof Error ? error.message : 'ゲームの開始に失敗しました';
+      alert(errorMessage);
+      onError?.(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -75,10 +78,13 @@ export function StatusTransitionButton({
         onSuccess?.('締切');
       } else {
         const errorMessage = result.errors._form?.[0] || 'ゲームの締切に失敗しました';
+        alert(errorMessage);
         onError?.(errorMessage);
       }
     } catch (error) {
-      onError?.(error instanceof Error ? error.message : 'ゲームの締切に失敗しました');
+      const errorMessage = error instanceof Error ? error.message : 'ゲームの締切に失敗しました';
+      alert(errorMessage);
+      onError?.(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -201,10 +207,13 @@ export function StatusTransitionButtonCompact({
         onSuccess?.('出題中');
       } else {
         const errorMessage = result.errors._form?.[0] || 'ゲームの開始に失敗しました';
+        alert(errorMessage);
         onError?.(errorMessage);
       }
     } catch (error) {
-      onError?.(error instanceof Error ? error.message : 'ゲームの開始に失敗しました');
+      const errorMessage = error instanceof Error ? error.message : 'ゲームの開始に失敗しました';
+      alert(errorMessage);
+      onError?.(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -228,10 +237,13 @@ export function StatusTransitionButtonCompact({
         onSuccess?.('締切');
       } else {
         const errorMessage = result.errors._form?.[0] || 'ゲームの締切に失敗しました';
+        alert(errorMessage);
         onError?.(errorMessage);
       }
     } catch (error) {
-      onError?.(error instanceof Error ? error.message : 'ゲームの締切に失敗しました');
+      const errorMessage = error instanceof Error ? error.message : 'ゲームの締切に失敗しました';
+      alert(errorMessage);
+      onError?.(errorMessage);
     } finally {
       setIsLoading(false);
     }

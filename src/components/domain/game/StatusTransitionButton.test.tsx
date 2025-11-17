@@ -9,6 +9,10 @@ vi.mock('@/app/actions/game', () => ({
   closeGameAction: vi.fn(),
 }));
 
+// Mock alert function
+const mockAlert = vi.fn();
+global.alert = mockAlert;
+
 // Get references to the mocked functions
 const { startGameAction: mockStartGameAction, closeGameAction: mockCloseGameAction } = await import('@/app/actions/game');
 
@@ -24,6 +28,7 @@ describe('StatusTransitionButton', () => {
     vi.clearAllMocks();
     vi.mocked(mockStartGameAction).mockReset();
     vi.mocked(mockCloseGameAction).mockReset();
+    mockAlert.mockClear();
   });
 
   describe('準備中 status', () => {
@@ -76,7 +81,7 @@ describe('StatusTransitionButton', () => {
       });
     });
 
-    it('should call onError when start action fails', async () => {
+    it('should call onError and show alert when start action fails', async () => {
       vi.mocked(mockStartGameAction).mockResolvedValue({
         success: false,
         errors: { _form: ['ゲームを開始するには出題者が必要です'] },
@@ -90,6 +95,7 @@ describe('StatusTransitionButton', () => {
 
       await waitFor(() => {
         expect(onError).toHaveBeenCalledWith('ゲームを開始するには出題者が必要です');
+        expect(mockAlert).toHaveBeenCalledWith('ゲームを開始するには出題者が必要です');
       });
     });
   });
@@ -167,6 +173,27 @@ describe('StatusTransitionButton', () => {
 
       await waitFor(() => {
         expect(onSuccess).toHaveBeenCalled();
+      });
+
+      confirmSpy.mockRestore();
+    });
+
+    it('should call onError and show alert when close action fails', async () => {
+      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+      vi.mocked(mockCloseGameAction).mockResolvedValue({
+        success: false,
+        errors: { _form: ['ゲームの締切に失敗しました'] },
+      });
+      const onError = vi.fn();
+
+      render(<StatusTransitionButton {...acceptingProps} onError={onError} />);
+
+      const closeButton = screen.getByRole('button', { name: /ゲームを締切/i });
+      fireEvent.click(closeButton);
+
+      await waitFor(() => {
+        expect(onError).toHaveBeenCalledWith('ゲームの締切に失敗しました');
+        expect(mockAlert).toHaveBeenCalledWith('ゲームの締切に失敗しました');
       });
 
       confirmSpy.mockRestore();
