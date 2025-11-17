@@ -40,24 +40,25 @@ export class StartAcceptingResponses {
       throw new ValidationError('ゲームを開始するには、少なくとも1人のプレゼンターが必要です');
     }
 
-    // Check if at least one presenter is complete
-    // Need to check episodes from repository since presenter entity may not have them
-    let hasCompletePresenter = false;
+    // Check that ALL presenters are complete
+    // Per spec: Each presenter must have exactly 3 episodes with exactly 1 lie
     for (const presenter of presenters) {
       const episodes = await this.gameRepository.findEpisodesByPresenterId(presenter.id);
-      if (episodes.length === 3) {
-        const lieCount = episodes.filter((ep) => ep.isLie).length;
-        if (lieCount === 1) {
-          hasCompletePresenter = true;
-          break;
-        }
-      }
-    }
 
-    if (!hasCompletePresenter) {
-      throw new ValidationError(
-        'ゲームを開始するには、少なくとも1人のプレゼンターが3つのエピソード（1つのウソを含む）を登録している必要があります'
-      );
+      // Each presenter must have exactly 3 episodes
+      if (episodes.length !== 3) {
+        throw new ValidationError(
+          `出題者 ${presenter.nickname} のエピソードが不完全です（${episodes.length}/3個）`
+        );
+      }
+
+      // Each presenter must have exactly 1 lie
+      const lieCount = episodes.filter((ep) => ep.isLie).length;
+      if (lieCount !== 1) {
+        throw new ValidationError(
+          `出題者 ${presenter.nickname} はウソを1つ選択する必要があります（現在${lieCount}個）`
+        );
+      }
     }
 
     // Transition status (will throw InvalidStatusTransitionError if not in 準備中)

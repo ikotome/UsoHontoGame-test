@@ -22,9 +22,9 @@
 
 **Purpose**: Project initialization and validation schemas
 
-- [ ] T001 Verify existing GameStatus value object in src/server/domain/value-objects/GameStatus.ts
-- [ ] T002 Create StatusTransitionError class in src/server/domain/errors/StatusTransitionError.ts
-- [ ] T003 [P] Add transition validation schemas to src/server/domain/schemas/gameSchemas.ts
+- [x] T001 Verify existing GameStatus value object in src/server/domain/value-objects/GameStatus.ts
+- [x] T002 Create StatusTransitionError class in src/server/domain/errors/StatusTransitionError.ts
+- [x] T003 [P] Add transition validation schemas to src/server/domain/schemas/gameSchemas.ts
 
 ---
 
@@ -34,11 +34,11 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Create ValidateStatusTransition use case test in src/server/application/use-cases/games/ValidateStatusTransition.test.ts
-- [ ] T005 Implement ValidateStatusTransition use case in src/server/application/use-cases/games/ValidateStatusTransition.ts
-- [ ] T006 Verify existing StartAcceptingResponses use case in src/server/application/use-cases/games/StartAcceptingResponses.ts
-- [ ] T007 Verify existing CloseGame use case in src/server/application/use-cases/games/CloseGame.ts
-- [ ] T008 Add presenter validation methods to PrismaGameRepository in src/server/infrastructure/repositories/PrismaGameRepository.ts
+- [x] T004 Create ValidateStatusTransition use case test in src/server/application/use-cases/games/ValidateStatusTransition.test.ts
+- [x] T005 Implement ValidateStatusTransition use case in src/server/application/use-cases/games/ValidateStatusTransition.ts
+- [x] T006 Verify existing StartAcceptingResponses use case in src/server/application/use-cases/games/StartAcceptingResponses.ts
+- [x] T007 Verify existing CloseGame use case in src/server/application/use-cases/games/CloseGame.ts
+- [x] T008 Add presenter validation methods to PrismaGameRepository in src/server/infrastructure/repositories/PrismaGameRepository.ts
 
 **Checkpoint**: Validation logic ready - user story implementation can now begin
 
@@ -54,20 +54,20 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T009 [P] [US1] Unit test for startGame Server Action in src/app/actions/game.test.ts
-- [ ] T010 [P] [US1] Component test for StatusTransitionButton in src/components/domain/game/StatusTransitionButton.test.tsx
-- [ ] T011 [P] [US1] Hook test for useGameStatus in src/components/pages/GameDetailPage/hooks/useGameStatus.test.ts
-- [ ] T012 [US1] Integration test for start game flow in tests/integration/status-transition.test.ts
+- [x] T009 [P] [US1] Unit test for startGame Server Action in src/app/actions/game.test.ts
+- [x] T010 [P] [US1] Component test for StatusTransitionButton in src/components/domain/game/StatusTransitionButton.test.tsx
+- [x] T011 [P] [US1] Hook test for useGameStatus in src/components/pages/GameDetailPage/hooks/useGameStatus.test.ts
+- [x] T012 [US1] Integration test for start game flow in tests/integration/status-transition.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Create startGame Server Action in src/app/actions/game.ts
-- [ ] T014 [P] [US1] Create GameStatusBadge component in src/components/domain/game/GameStatusBadge.tsx
-- [ ] T015 [P] [US1] Create StatusTransitionButton component in src/components/domain/game/StatusTransitionButton.tsx
-- [ ] T016 [US1] Create useGameStatus hook in src/components/pages/GameDetailPage/hooks/useGameStatus.ts
-- [ ] T017 [US1] Integrate status transition UI into GameDetailPage in src/components/pages/GameDetailPage/index.tsx
-- [ ] T018 [US1] Add error handling and loading states to StatusTransitionButton
-- [ ] T019 [US1] Implement optimistic UI updates in useGameStatus hook
+- [x] T013 [US1] Create startGame Server Action in src/app/actions/game.ts
+- [x] T014 [P] [US1] Create GameStatusBadge component in src/components/domain/game/GameStatusBadge.tsx
+- [x] T015 [P] [US1] Create StatusTransitionButton component in src/components/domain/game/StatusTransitionButton.tsx
+- [x] T016 [US1] Create useGameStatus hook in src/components/pages/GameDetailPage/hooks/useGameStatus.ts
+- [x] T017 [US1] Integrate status transition UI into GameDetailPage in src/components/pages/GameDetailPage/index.tsx
+- [x] T018 [US1] Add error handling and loading states to StatusTransitionButton
+- [x] T019 [US1] Implement optimistic UI updates in useGameStatus hook
 
 **Checkpoint**: Start game functionality complete and independently testable
 
@@ -81,17 +81,17 @@
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T020 [P] [US2] Unit test for closeGame Server Action in src/app/actions/game.test.ts
-- [ ] T021 [P] [US2] Component test for confirmation dialog in StatusTransitionButton.test.tsx
-- [ ] T022 [US2] Integration test for close game flow with confirmation in tests/integration/status-transition.test.ts
+- [x] T020 [P] [US2] Unit test for closeGame Server Action in src/app/actions/game.test.ts
+- [x] T021 [P] [US2] Component test for confirmation dialog in StatusTransitionButton.test.tsx
+- [x] T022 [US2] Integration test for close game flow with confirmation in tests/integration/status-transition.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Create closeGame Server Action in src/app/actions/game.ts
-- [ ] T024 [US2] Add confirmation dialog logic to StatusTransitionButton component
-- [ ] T025 [US2] Update useGameStatus hook to handle close game transition
-- [ ] T026 [US2] Add confirmation state management to useGameStatus hook
-- [ ] T027 [US2] Implement rollback on confirmation cancel
+- [x] T023 [US2] Create closeGame Server Action in src/app/actions/game.ts
+- [x] T024 [US2] Add confirmation dialog logic to StatusTransitionButton component
+- [x] T025 [US2] Update useGameStatus hook to handle close game transition
+- [x] T026 [US2] Add confirmation state management to useGameStatus hook
+- [x] T027 [US2] Implement rollback on confirmation cancel
 
 **Checkpoint**: Close game functionality complete with confirmation dialog
 
@@ -105,17 +105,17 @@
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T028 [P] [US3] Component test for GameStatusBadge display states in GameStatusBadge.test.tsx
-- [ ] T029 [P] [US3] Test conditional button rendering in StatusTransitionButton.test.tsx
-- [ ] T030 [US3] E2E test for status visibility in tests/e2e/game-status-flow.spec.ts
+- [x] T028 [P] [US3] Component test for GameStatusBadge display states in GameStatusBadge.test.tsx
+- [x] T029 [P] [US3] Test conditional button rendering in StatusTransitionButton.test.tsx
+- [x] T030 [US3] E2E test for status visibility in tests/e2e/status-transitions.spec.ts
 
 ### Implementation for User Story 3
 
-- [ ] T031 [P] [US3] Add status-specific styling to GameStatusBadge component
-- [ ] T032 [US3] Implement conditional rendering logic in StatusTransitionButton
-- [ ] T033 [US3] Add status-based button text and icons to StatusTransitionButton
-- [ ] T034 [US3] Update GameDetailPage to prominently display status badge
-- [ ] T035 [US3] Add disabled state styling for unavailable transitions
+- [x] T031 [P] [US3] Add status-specific styling to GameStatusBadge component
+- [x] T032 [US3] Implement conditional rendering logic in StatusTransitionButton
+- [x] T033 [US3] Add status-based button text and icons to StatusTransitionButton
+- [x] T034 [US3] Update GameDetailPage to prominently display status badge
+- [x] T035 [US3] Add disabled state styling for unavailable transitions
 
 **Checkpoint**: All status states properly displayed with correct available actions
 
@@ -125,13 +125,13 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T036 [P] Add authorization checks to all Server Actions
-- [ ] T037 Handle concurrent status change attempts with database locks
-- [ ] T038 [P] Add telemetry/logging for status transitions
-- [ ] T039 Performance optimization for presenter validation queries
-- [ ] T040 [P] Add accessibility attributes to status transition buttons
-- [ ] T041 Run quickstart.md validation scenarios
-- [ ] T042 Format all files with Biome and commit changes
+- [x] T036 [P] Add authorization checks to all Server Actions
+- [x] T037 Handle concurrent status change attempts with database locks
+- [x] T038 [P] Add telemetry/logging for status transitions
+- [x] T039 Performance optimization for presenter validation queries
+- [x] T040 [P] Add accessibility attributes to status transition buttons
+- [x] T041 Run quickstart.md validation scenarios
+- [x] T042 Format all files with Biome and commit changes
 
 ---
 
