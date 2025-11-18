@@ -364,17 +364,12 @@ export class PrismaGameRepository implements IGameRepository {
     }>;
     total: number;
   }> {
-    // Fetch games with player count
+    // Fetch games with current player count
     const games = await this.prisma.game.findMany({
       where: { status: '出題中' },
       orderBy: { createdAt: 'desc' },
       take: params.limit,
       skip: params.skip,
-      include: {
-        _count: {
-          select: { players: true },
-        },
-      },
     });
 
     // Get total count
@@ -388,7 +383,7 @@ export class PrismaGameRepository implements IGameRepository {
         id: game.id,
         title: game.name || 'Untitled Game',
         createdAt: game.createdAt,
-        playerCount: game._count.players,
+        playerCount: game.currentPlayers,
         playerLimit: game.maxPlayers,
       })),
       total,
