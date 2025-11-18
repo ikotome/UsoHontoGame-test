@@ -5,6 +5,7 @@
 // Server Actions with Zod validation for game management
 
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import type { GameDetailDto } from '@/server/application/dto/GameDetailDto';
 import type { CreateGameOutput, GameManagementDto } from '@/server/application/dto/GameDto';
 import { CloseGame } from '@/server/application/use-cases/games/CloseGame';
@@ -91,6 +92,10 @@ export async function createGameAction(
       playerLimit: validationResult.data.playerLimit,
     });
 
+    // Revalidate paths for cache management
+    revalidatePath('/');
+    revalidatePath('/games');
+
     return {
       success: true,
       game,
@@ -167,6 +172,10 @@ export async function startAcceptingAction(
     await useCase.execute({
       gameId: validationResult.data.gameId,
     });
+
+    // Revalidate paths for cache management
+    revalidatePath('/games');
+    revalidatePath(`/games/${validationResult.data.gameId}`);
 
     return { success: true };
   } catch (error) {
@@ -358,6 +367,10 @@ export async function updateGameAction(
       };
     }
 
+    // Revalidate paths for cache management
+    revalidatePath('/games');
+    revalidatePath(`/games/${validationResult.data.gameId}`);
+
     return {
       success: true,
       game: result.game,
@@ -417,6 +430,10 @@ export async function deleteGameAction(
       gameId: validationResult.data.gameId,
       requesterId: sessionId,
     });
+
+    // Revalidate paths for cache management
+    revalidatePath('/');
+    revalidatePath('/games');
 
     return { success: true };
   } catch (error) {
@@ -488,6 +505,11 @@ export async function startGameAction(
       gameId: validationResult.data.gameId,
     });
 
+    // Revalidate paths for cache management
+    revalidatePath('/games');
+    revalidatePath(`/games/${validationResult.data.gameId}`);
+    revalidatePath(`/games/${validationResult.data.gameId}/presenters`);
+
     return { success: true };
   } catch (error) {
     console.error('Failed to start game:', error);
@@ -558,6 +580,11 @@ export async function closeGameAction(
     await closeUseCase.execute({
       gameId: validationResult.data.gameId,
     });
+
+    // Revalidate paths for cache management
+    revalidatePath('/games');
+    revalidatePath(`/games/${validationResult.data.gameId}`);
+    revalidatePath(`/games/${validationResult.data.gameId}/presenters`);
 
     return { success: true };
   } catch (error) {
