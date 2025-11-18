@@ -12,8 +12,8 @@ import {
   type StatusTransitionErrorCode,
 } from '../../../domain/errors/StatusTransitionError';
 import type { IGameRepository } from '../../../domain/repositories/IGameRepository';
-import type { GameStatusValue } from '../../../domain/value-objects/GameStatus';
 import { GameId } from '../../../domain/value-objects/GameId';
+import type { GameStatusValue } from '../../../domain/value-objects/GameStatus';
 
 export interface ValidationResult {
   canTransition: boolean;

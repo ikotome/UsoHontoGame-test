@@ -30,9 +30,7 @@ export default async function Page() {
   const { GetAvailableGames } = await import(
     '@/server/application/use-cases/games/GetAvailableGames'
   );
-  const { createGameRepository } = await import(
-    '@/server/infrastructure/repositories'
-  );
+  const { createGameRepository } = await import('@/server/infrastructure/repositories');
 
   const gameRepository = createGameRepository();
   const getGamesUseCase = new GetAvailableGames(gameRepository);
