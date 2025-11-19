@@ -14,10 +14,12 @@ import { z } from 'zod';
 /**
  * Schema for fetching active games
  */
-export const getActiveGamesRequestSchema = z.object({
-  cursor: z.string().optional(),
-  limit: z.number().min(1).max(100).default(20),
-}).optional();
+export const getActiveGamesRequestSchema = z
+  .object({
+    cursor: z.string().optional(),
+    limit: z.number().min(1).max(100).default(20),
+  })
+  .optional();
 
 export type GetActiveGamesRequest = z.infer<typeof getActiveGamesRequestSchema>;
 
@@ -80,9 +82,7 @@ export function isActiveGamesResponse(
   return response.success === true;
 }
 
-export function isErrorResponse(
-  response: GetActiveGamesActionResponse
-): response is ErrorResponse {
+export function isErrorResponse(response: GetActiveGamesActionResponse): response is ErrorResponse {
   return response.success === false;
 }
 
@@ -105,9 +105,7 @@ export type GetActiveGamesAction = (
 /**
  * Validate request parameters
  */
-export function validateGetActiveGamesRequest(
-  data: unknown
-): GetActiveGamesRequest | undefined {
+export function validateGetActiveGamesRequest(data: unknown): GetActiveGamesRequest | undefined {
   const result = getActiveGamesRequestSchema.safeParse(data);
   return result.success ? result.data : undefined;
 }
@@ -115,9 +113,7 @@ export function validateGetActiveGamesRequest(
 /**
  * Validate response data
  */
-export function validateActiveGamesResponse(
-  data: unknown
-): ActiveGamesResponse | null {
+export function validateActiveGamesResponse(data: unknown): ActiveGamesResponse | null {
   const result = activeGamesResponseSchema.safeParse(data);
   return result.success ? result.data : null;
 }

@@ -607,9 +607,7 @@ export async function closeGameAction(
  */
 export async function getActiveGamesAction(params?: { cursor?: string; limit?: number }) {
   try {
-    const { GetActiveGames } = await import(
-      '@/server/application/use-cases/games/GetActiveGames'
-    );
+    const { GetActiveGames } = await import('@/server/application/use-cases/games/GetActiveGames');
     const repository = createGameRepository();
     const useCase = new GetActiveGames(repository);
 
