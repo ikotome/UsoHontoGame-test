@@ -41,6 +41,24 @@ vi.mock('@/server/infrastructure/di/SessionServiceContainer', () => ({
 	},
 }));
 
+// Mock ValidateSession use case
+const mockValidateSession = {
+	execute: vi.fn(),
+};
+
+vi.mock('@/server/application/use-cases/session/ValidateSession', () => ({
+	ValidateSession: vi.fn().mockImplementation(function (this: any) {
+		Object.assign(this, mockValidateSession);
+	}),
+}));
+
+// Mock CookieSessionRepository
+vi.mock('@/server/infrastructure/repositories/CookieSessionRepository', () => ({
+	CookieSessionRepository: vi.fn(function (this: any) {
+		return {};
+	}),
+}));
+
 describe('Answer Submission Server Actions', () => {
 	let mockGameRepository: any;
 	let mockAnswerRepository: any;
@@ -79,6 +97,7 @@ describe('Answer Submission Server Actions', () => {
 
 		// Clear all mocks
 		vi.clearAllMocks();
+		mockValidateSession.execute.mockClear();
 
 		// Setup mocks
 		const {
@@ -206,7 +225,7 @@ describe('Answer Submission Server Actions', () => {
 			);
 
 			mockSessionService.requireCurrentSession.mockResolvedValue('session-123');
-			mockSessionService.getCurrentSession.mockResolvedValue({
+			mockValidateSession.execute.mockResolvedValue({
 				sessionId: 'session-123',
 				nickname: 'TestUser',
 			});
@@ -265,7 +284,7 @@ describe('Answer Submission Server Actions', () => {
 			}
 		});
 
-		it('should return error when nickname not set', async () => {
+		it('should use default nickname when nickname not set', async () => {
 			// Arrange
 			const formData = new FormData();
 			formData.append('gameId', '550e8400-e29b-41d4-a716-446655440000');
@@ -273,24 +292,42 @@ describe('Answer Submission Server Actions', () => {
 				'selections',
 				JSON.stringify({
 					'presenter-1': 'episode-1',
+					'presenter-2': 'episode-3',
 				}),
 			);
 
 			mockSessionService.requireCurrentSession.mockResolvedValue('session-123');
-			mockSessionService.getCurrentSession.mockResolvedValue({
+			mockValidateSession.execute.mockResolvedValue({
 				sessionId: 'session-123',
 				nickname: null,
+			});
+
+			mockSubmitAnswer.execute.mockResolvedValue({
+				success: true,
+				data: {
+					answerId: 'answer-456',
+					message: '回答を送信しました',
+				},
 			});
 
 			// Act
 			const result = await submitAnswerAction(formData);
 
 			// Assert
-			expect(result.success).toBe(false);
-			if (!result.success) {
-				expect(result.errors._form).toBeDefined();
-				expect(result.errors._form?.[0]).toContain('ニックネームを設定してください');
+			expect(result.success).toBe(true);
+			if (result.success) {
+				expect(result.data.answerId).toBe('answer-456');
 			}
+			// Verify that a default nickname was used (参加者_<sessionId first 8 chars>)
+			expect(mockSubmitAnswer.execute).toHaveBeenCalledWith({
+				gameId: '550e8400-e29b-41d4-a716-446655440000',
+				sessionId: 'session-123',
+				nickname: '参加者_session-',
+				selections: {
+					'presenter-1': 'episode-1',
+					'presenter-2': 'episode-3',
+				},
+			});
 		});
 
 		it('should return validation errors for invalid input', async () => {
@@ -300,7 +337,7 @@ describe('Answer Submission Server Actions', () => {
 			formData.append('selections', JSON.stringify({})); // Invalid: empty selections
 
 			mockSessionService.requireCurrentSession.mockResolvedValue('session-123');
-			mockSessionService.getCurrentSession.mockResolvedValue({
+			mockValidateSession.execute.mockResolvedValue({
 				sessionId: 'session-123',
 				nickname: 'TestUser',
 			});
@@ -330,7 +367,7 @@ describe('Answer Submission Server Actions', () => {
 			);
 
 			mockSessionService.requireCurrentSession.mockResolvedValue('session-123');
-			mockSessionService.getCurrentSession.mockResolvedValue({
+			mockValidateSession.execute.mockResolvedValue({
 				sessionId: 'session-123',
 				nickname: 'TestUser',
 			});
@@ -366,7 +403,7 @@ describe('Answer Submission Server Actions', () => {
 			);
 
 			mockSessionService.requireCurrentSession.mockResolvedValue('session-123');
-			mockSessionService.getCurrentSession.mockResolvedValue({
+			mockValidateSession.execute.mockResolvedValue({
 				sessionId: 'session-123',
 				nickname: 'TestUser',
 			});
@@ -433,7 +470,7 @@ describe('Answer Submission Server Actions', () => {
 			formData.append('selections', 'invalid-json'); // Invalid JSON
 
 			mockSessionService.requireCurrentSession.mockResolvedValue('session-123');
-			mockSessionService.getCurrentSession.mockResolvedValue({
+			mockValidateSession.execute.mockResolvedValue({
 				sessionId: 'session-123',
 				nickname: 'TestUser',
 			});

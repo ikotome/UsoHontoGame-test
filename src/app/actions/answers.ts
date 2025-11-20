@@ -12,11 +12,16 @@ import type { SubmitAnswerResult } from '@/server/application/use-cases/answers/
 import { SubmitAnswer } from '@/server/application/use-cases/answers/SubmitAnswer';
 import { SubmitAnswerSchema } from '@/server/domain/schemas/answerSchemas';
 import { SessionServiceContainer } from '@/server/infrastructure/di/SessionServiceContainer';
+import { ValidateSession } from '@/server/application/use-cases/session/ValidateSession';
+import { CookieSessionRepository } from '@/server/infrastructure/repositories/CookieSessionRepository';
 import {
 	createAnswerRepository,
 	createGameRepository,
 	createParticipationRepository,
 } from '@/server/infrastructure/repositories';
+
+// Create session repository instance for session validation
+const sessionRepository = new CookieSessionRepository();
 
 /**
  * Server Action: Get game data for answer submission page
@@ -43,28 +48,23 @@ export async function submitAnswerAction(formData: FormData): Promise<
 > {
 	// Get session
 	let sessionId: string;
-	let nickname: string | null;
+	let nickname: string;
 
 	try {
 		const sessionService = SessionServiceContainer.getSessionService();
 		sessionId = await sessionService.requireCurrentSession();
-		const session = await sessionService.getCurrentSession();
-		nickname = session?.nickname ?? null;
+
+		// Use ValidateSession to get session data with nickname
+		const validateUseCase = new ValidateSession(sessionRepository);
+		const session = await validateUseCase.execute(sessionId);
+
+		// Use nickname if available, otherwise use default name based on sessionId
+		nickname = session?.nickname ?? `参加者_${sessionId.slice(0, 8)}`;
 	} catch {
 		return {
 			success: false,
 			errors: {
-				_form: ['セッションが見つかりません。ニックネームを設定してください。'],
-			},
-		};
-	}
-
-	// Validate nickname
-	if (!nickname) {
-		return {
-			success: false,
-			errors: {
-				_form: ['ニックネームを設定してください。'],
+				_form: ['セッションが見つかりません。'],
 			},
 		};
 	}
