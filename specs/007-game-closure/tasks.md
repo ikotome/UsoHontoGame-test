@@ -98,8 +98,8 @@
 ### Implementation for User Story 2
 
 - [X] T022 [US2] Add closed game check to GetGameForAnswers use case in src/server/application/use-cases/answers/GetGameForAnswers.ts
-- [ ] T023 [US2] Update answer page to handle closed game redirect in src/app/games/[id]/answer/page.tsx
-- [ ] T024 [US2] Create read-only answer view for existing participants who submitted before closure
+- [X] T023 [US2] Update answer page to handle closed game redirect in src/app/games/[id]/answer/page.tsx
+- [ ] T024 [US2] Create read-only answer view for existing participants who submitted before closure (DEFERRED - optional polish)
 
 **Checkpoint**: Answer submissions blocked for closed games - User Story 2 complete
 
