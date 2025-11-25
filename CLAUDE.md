@@ -292,8 +292,8 @@ npm run check              # Lint and format with Biome
 
 ## Recent Changes
 - 006-results-dashboard: Added TypeScript 5 (strict mode) + Next.js 16.0.1, React 19.2.0 + Next.js 16.0.1, React 19.2.0, Prisma 6.19.0, Zod 4.1.12, Tailwind CSS v4, nanoid 5.1.6
+- 006-results-dashboard: Added TypeScript 5 (strict mode) + Next.js 16.0.1, React 19.2.0 + Next.js 16.0.1, React 19.2.0, Prisma 6.19.0, Zod 4.1.12, Tailwind CSS v4, nanoid 5.1.6
 - 001-lie-detection-answers: Added TypeScript 5 (strict mode) + Next.js 16.0.1 (App Router), React 19.2.0, Prisma 6.19.0, Zod 4.1.12
-- 005-top-active-games: Implemented TOP active games display (Phases 1-5 complete)
   - Created ActiveGameCard, ActiveGamesList, EmptyState components
   - GetActiveGames use case with status filtering
   - formatRelativeTime utility for Japanese time display

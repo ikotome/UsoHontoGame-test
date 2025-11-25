@@ -87,21 +87,21 @@
 
 ### Tests for User Story 2 (Write FIRST, ensure they FAIL)
 
-- [ ] T022 [P] [US2] Write unit tests for CalculateScores use case in src/server/application/use-cases/results/CalculateScores.test.ts
-- [ ] T023 [P] [US2] Write integration tests for scoreboard API in tests/integration/results/score-calculation.test.ts
-- [ ] T024 [P] [US2] Write component tests for ScoreboardPage in src/components/pages/ScoreboardPage/ScoreboardPage.test.tsx
-- [ ] T025 [P] [US2] Write component tests for ScoreCard in src/components/domain/results/ScoreCard.test.tsx
+- [X] T022 [P] [US2] Write unit tests for CalculateScores use case in src/server/application/use-cases/results/CalculateScores.test.ts
+- [X] T023 [P] [US2] Write integration tests for scoreboard API in tests/integration/results/score-calculation.test.ts
+- [X] T024 [P] [US2] Write component tests for ScoreboardPage in src/components/pages/ScoreboardPage/ScoreboardPage.test.tsx
+- [X] T025 [P] [US2] Write component tests for ScoreCard in src/components/domain/results/ScoreCard.test.tsx
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] Implement CalculateScores use case in src/server/application/use-cases/results/CalculateScores.ts (makes T022 pass)
-- [ ] T027 [US2] Implement API route handler in src/app/api/games/[gameId]/scoreboard/route.ts (makes T023 pass)
-- [ ] T028 [P] [US2] Create ScoreboardPage types in src/components/pages/ScoreboardPage/ScoreboardPage.types.ts
-- [ ] T029 [P] [US2] Create ScoreCard domain component in src/components/domain/results/ScoreCard.tsx (makes T025 pass)
-- [ ] T030 [US2] Implement ScoreboardPage component in src/components/pages/ScoreboardPage/index.tsx (makes T024 pass)
-- [ ] T031 [US2] Create App Router page wrapper in src/app/games/[id]/scoreboard/page.tsx
-- [ ] T032 [US2] Format code with Biome: npx biome format --write .
-- [ ] T033 [US2] Run all tests to verify User Story 2: npm test
+- [X] T026 [US2] Implement CalculateScores use case in src/server/application/use-cases/results/CalculateScores.ts (makes T022 pass)
+- [X] T027 [US2] Implement API route handler in src/app/api/games/[gameId]/scoreboard/route.ts (makes T023 pass)
+- [X] T028 [P] [US2] Create ScoreboardPage types in src/components/pages/ScoreboardPage/ScoreboardPage.types.ts
+- [X] T029 [P] [US2] Create ScoreCard domain component in src/components/domain/results/ScoreCard.tsx (makes T025 pass)
+- [X] T030 [US2] Implement ScoreboardPage component in src/components/pages/ScoreboardPage/index.tsx (makes T024 pass)
+- [X] T031 [US2] Create App Router page wrapper in src/app/games/[id]/scoreboard/page.tsx
+- [X] T032 [US2] Format code with Biome: npx biome format --write .
+- [X] T033 [US2] Run all tests to verify User Story 2: npm test
 - [ ] T034 [US2] Manual testing: Close game, navigate to scoreboard, verify scores match expected calculations
 - [ ] T035 [US2] Commit User Story 2: git add . && git commit -m "feat(US2): implement score calculation and scoreboard display"
 
@@ -123,28 +123,28 @@
 
 ### Tests for User Story 3 (Write FIRST, ensure they FAIL)
 
-- [ ] T036 [P] [US3] Write unit tests for GetResults use case in src/server/application/use-cases/results/GetResults.test.ts
-- [ ] T037 [P] [US3] Write integration tests for results API in tests/integration/results/results-display.test.ts
-- [ ] T038 [P] [US3] Write component tests for Confetti in src/components/ui/Confetti.test.tsx
-- [ ] T039 [P] [US3] Write component tests for WinnerCelebration in src/components/domain/results/WinnerCelebration.test.tsx
-- [ ] T040 [P] [US3] Write component tests for RankingDisplay in src/components/domain/results/RankingDisplay.test.tsx
-- [ ] T041 [P] [US3] Write component tests for ResultsPage in src/components/pages/ResultsPage/ResultsPage.test.tsx
-- [ ] T042 [P] [US3] Write hook tests for useResults in src/components/pages/ResultsPage/hooks/useResults.test.ts
+- [X] T036 [P] [US3] Write unit tests for GetResults use case in src/server/application/use-cases/results/GetResults.test.ts
+- [X] T037 [P] [US3] Write integration tests for results API in tests/integration/results/results-display.test.ts
+- [X] T038 [P] [US3] Write component tests for Confetti in src/components/ui/Confetti.test.tsx
+- [X] T039 [P] [US3] Write component tests for WinnerCelebration in src/components/domain/results/WinnerCelebration.test.tsx
+- [X] T040 [P] [US3] Write component tests for RankingDisplay in src/components/domain/results/RankingDisplay.test.tsx
+- [X] T041 [P] [US3] Write component tests for ResultsPage in src/components/pages/ResultsPage/ResultsPage.test.tsx
+- [X] T042 [P] [US3] Write hook tests for useResults in src/components/pages/ResultsPage/hooks/useResults.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T043 [US3] Implement GetResults use case with ranking logic in src/server/application/use-cases/results/GetResults.ts (makes T036 pass)
-- [ ] T044 [US3] Implement API route handler in src/app/api/games/[gameId]/results/route.ts (makes T037 pass)
-- [ ] T045 [P] [US3] Create animation helpers in src/lib/animations.ts
-- [ ] T046 [P] [US3] Create Confetti UI component in src/components/ui/Confetti.tsx (makes T038 pass)
-- [ ] T047 [US3] Create WinnerCelebration domain component in src/components/domain/results/WinnerCelebration.tsx (makes T039 pass, depends on T046)
-- [ ] T048 [P] [US3] Create RankingDisplay domain component in src/components/domain/results/RankingDisplay.tsx (makes T040 pass)
-- [ ] T049 [P] [US3] Create ResultsPage types in src/components/pages/ResultsPage/ResultsPage.types.ts
-- [ ] T050 [US3] Implement useResults hook in src/components/pages/ResultsPage/hooks/useResults.ts (makes T042 pass)
-- [ ] T051 [US3] Implement ResultsPage component in src/components/pages/ResultsPage/index.tsx (makes T041 pass, depends on T047-T050)
-- [ ] T052 [US3] Create App Router page wrapper in src/app/games/[id]/results/page.tsx
-- [ ] T053 [US3] Format code with Biome: npx biome format --write .
-- [ ] T054 [US3] Run all tests to verify User Story 3: npm test
+- [X] T043 [US3] Implement GetResults use case with ranking logic in src/server/application/use-cases/results/GetResults.ts (makes T036 pass)
+- [X] T044 [US3] Implement API route handler in src/app/api/games/[gameId]/results/route.ts (makes T037 pass)
+- [X] T045 [P] [US3] Create animation helpers in src/lib/animations.ts
+- [X] T046 [P] [US3] Create Confetti UI component in src/components/ui/Confetti.tsx (makes T038 pass)
+- [X] T047 [US3] Create WinnerCelebration domain component in src/components/domain/results/WinnerCelebration.tsx (makes T039 pass, depends on T046)
+- [X] T048 [P] [US3] Create RankingDisplay domain component in src/components/domain/results/RankingDisplay.tsx (makes T040 pass)
+- [X] T049 [P] [US3] Create ResultsPage types in src/components/pages/ResultsPage/ResultsPage.types.ts
+- [X] T050 [US3] Implement useResults hook in src/components/pages/ResultsPage/hooks/useResults.ts (makes T042 pass)
+- [X] T051 [US3] Implement ResultsPage component in src/components/pages/ResultsPage/index.tsx (makes T041 pass, depends on T047-T050)
+- [X] T052 [US3] Create App Router page wrapper in src/app/games/[id]/results/page.tsx
+- [X] T053 [US3] Format code with Biome: npx biome format --write .
+- [X] T054 [US3] Run all tests to verify User Story 3: npm test
 - [ ] T055 [US3] Manual testing: View results page, verify confetti plays, winners highlighted, ties handled correctly
 - [ ] T056 [US3] Commit User Story 3: git add . && git commit -m "feat(US3): implement final results with winner celebration"
 
@@ -156,16 +156,16 @@
 
 **Purpose**: E2E testing, documentation, and final validation
 
-- [ ] T057 [P] Write E2E test for moderator flow in tests/e2e/results-dashboard.test.ts
-- [ ] T058 [P] Write E2E test for participant flow in tests/e2e/results-dashboard.test.ts
+- [X] T057 [P] Write E2E test for moderator flow in tests/e2e/results-dashboard.test.ts
+- [X] T058 [P] Write E2E test for participant flow in tests/e2e/results-dashboard.test.ts
 - [ ] T059 Run E2E tests: npm run test:e2e
-- [ ] T060 Update CLAUDE.md context: .specify/scripts/bash/update-agent-context.sh claude
+- [X] T060 Update CLAUDE.md context: .specify/scripts/bash/update-agent-context.sh claude
 - [ ] T061 Run full test suite: npm test (should show 565+ tests passing)
 - [ ] T062 Run build verification: npm run build
 - [ ] T063 [P] Add accessibility improvements (ARIA labels, keyboard navigation)
 - [ ] T064 [P] Performance optimization (lazy loading, memoization if needed)
 - [ ] T065 Manual smoke test: Test all three pages end-to-end
-- [ ] T066 Format final code: npx biome format --write .
+- [X] T066 Format final code: npx biome format --write .
 - [ ] T067 Final commit: git add . && git commit -m "docs: finalize results dashboard with E2E tests and documentation"
 
 **Checkpoint**: Feature complete, all tests passing, ready for PR
