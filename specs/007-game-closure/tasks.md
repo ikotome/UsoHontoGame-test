@@ -70,8 +70,8 @@
 
 ### Tests for User Story 3
 
-- [ ] T014 [P] [US3] Write tests for GetResponseStatus returning game status in src/server/application/use-cases/results/GetResponseStatus.test.ts
-- [ ] T015 [P] [US3] Write tests for useResponseStatus detecting closed state in src/components/pages/ResponseStatusPage/hooks/useResponseStatus.test.ts
+- [X] T014 [P] [US3] Write tests for GetResponseStatus returning game status in src/server/application/use-cases/results/GetResponseStatus.test.ts
+- [X] T015 [P] [US3] Write tests for useResponseStatus detecting closed state in src/components/pages/ResponseStatusPage/hooks/useResponseStatus.test.ts
 
 ### Implementation for User Story 3
 
