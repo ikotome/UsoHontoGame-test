@@ -48,8 +48,8 @@
 
 ### Tests for User Story 1
 
-- [ ] T008 [P] [US1] Write unit tests for useCloseGame hook in src/components/pages/GameDetailPage/hooks/useCloseGame.test.ts
-- [ ] T009 [P] [US1] Write component tests for CloseGameButton in src/components/domain/game/CloseGameButton.test.tsx
+- [X] T008 [P] [US1] Write unit tests for useCloseGame hook in src/components/pages/GameDetailPage/hooks/useCloseGame.test.ts
+- [X] T009 [P] [US1] Write component tests for CloseGameButton in src/components/domain/game/CloseGameButton.test.tsx
 
 ### Implementation for User Story 1
 
