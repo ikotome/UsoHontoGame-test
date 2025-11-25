@@ -7,7 +7,6 @@ import { ResponseStatusPage } from '@/components/pages/ResponseStatusPage';
 import { SessionServiceContainer } from '@/server/infrastructure/di/SessionServiceContainer';
 import { GetResponseStatus } from '@/server/application/use-cases/results/GetResponseStatus';
 import { createGameRepository, createAnswerRepository } from '@/server/infrastructure/repositories';
-import { GameId } from '@/server/domain/value-objects/GameId';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -15,7 +14,8 @@ interface PageProps {
 
 /**
  * Next.js App Router page for /games/[id]/dashboard
- * Handles session check, authorization, and initial data fetching
+ * Handles session check and initial data fetching
+ * Dashboard is publicly accessible to all users
  */
 export default async function Page({ params }: PageProps) {
   // Check session
@@ -34,13 +34,6 @@ export default async function Page({ params }: PageProps) {
   const useCase = new GetResponseStatus(gameRepository, answerRepository);
 
   const result = await useCase.execute(gameId);
-
-  // Check authorization - verify user is game creator
-  const game = await gameRepository.findById(new GameId(gameId));
-  if (game && game.creatorId !== sessionId) {
-    // Not authorized - redirect to game detail page
-    redirect(`/games/${gameId}`);
-  }
 
   // Pass initial data to client component
   // Client component will handle polling and real-time updates

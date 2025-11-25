@@ -21,13 +21,13 @@ All endpoints follow REST conventions and return JSON responses.
 
 ### GET `/api/games/[gameId]/dashboard`
 
-**Purpose**: Get real-time response submission status for moderators
+**Purpose**: Get real-time response submission status for all users
 
 **Priority**: P1 (Core functionality)
 
-**Authentication**: Session-based (requires creator session)
+**Authentication**: Session-based (requires valid session)
 
-**Authorization**: Only game creator can access
+**Authorization**: Public to all authenticated users
 
 ---
 
@@ -122,14 +122,6 @@ Cookie: session=xyz789
 {
   "error": "Unauthorized",
   "details": "Session required"
-}
-```
-
-**403 Forbidden** - Not game creator
-```json
-{
-  "error": "Forbidden",
-  "details": "Only game creator can view response status"
 }
 ```
 
@@ -495,7 +487,6 @@ if (!sessionId) {
 ## Testing Checklist
 
 - [ ] Dashboard returns 400 when game status ≠ '出題中'
-- [ ] Dashboard returns 403 when requester ≠ creator
 - [ ] Dashboard counts submissions correctly
 - [ ] Dashboard sets allSubmitted when all participants submitted
 - [ ] Scoreboard returns 400 when game status ≠ '締切'

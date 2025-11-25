@@ -1,13 +1,12 @@
 // API Route: Response Status Dashboard
 // Feature: 006-results-dashboard, User Story 1
-// Returns real-time response submission status for moderators
+// Returns real-time response submission status (publicly accessible)
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { GetResponseStatus } from '@/server/application/use-cases/results/GetResponseStatus';
 import { SessionServiceContainer } from '@/server/infrastructure/di/SessionServiceContainer';
 import { createGameRepository, createAnswerRepository } from '@/server/infrastructure/repositories';
-import { GameId } from '@/server/domain/value-objects/GameId';
 
 export async function GET(
   request: NextRequest,
@@ -59,18 +58,6 @@ export async function GET(
       }
 
       return NextResponse.json({ error: 'Bad Request', details: errorMessage }, { status: 400 });
-    }
-
-    // Verify authorization (only game creator can view dashboard)
-    const game = await gameRepository.findById(new GameId(gameId));
-    if (game && game.creatorId !== sessionId) {
-      return NextResponse.json(
-        {
-          error: 'Forbidden',
-          details: 'Only game creator can view response status',
-        },
-        { status: 403 }
-      );
     }
 
     // Return successful response
