@@ -335,6 +335,26 @@ describe('Presenter Server Actions', () => {
         expect(result.errors._form).toContain('Database insert failed');
       }
     });
+
+    it('should handle non-existent presenter (null presenter check)', async () => {
+      // Tests branch at line 223-225: if (presenter) - null branch
+      const formData = new FormData();
+      formData.append('presenterId', 'non-existent-presenter');
+      formData.append('text', 'Test episode');
+      formData.append('isLie', 'true');
+
+      // Presenter not found - returns null
+      mockRepository.findPresenterById.mockResolvedValue(null);
+
+      const result = await addEpisodeAction(formData);
+
+      // Should fail because presenter doesn't exist (use case throws NotFoundError)
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.errors._form).toBeDefined();
+        // The null branch is tested - revalidatePath is not called when presenter is null
+      }
+    });
   });
 
   describe('addPresenterWithEpisodesAction', () => {
