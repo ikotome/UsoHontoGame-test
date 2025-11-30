@@ -1,24 +1,30 @@
 // Game List Page Component
-// Feature: 002-game-preparation
+// Feature: 002-game-preparation, 008-i18n-support
 // Presentational component for displaying game management list
 
+'use client';
+
 import { GameListClient } from '@/components/domain/game/GameListClient';
+import { useLanguage } from '@/hooks/useLanguage';
 import type { GameListPageErrorProps, GameListPageProps } from './GameListPage.types';
 
 /**
  * GameListPage - Main component for displaying game management
  * Pure presentational component with no business logic
  *
+ * Feature 008: Added i18n support
  * @param props - Component props including games data
  */
 export function GameListPage({ games }: GameListPageProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">ゲーム管理</h1>
-          <p className="mt-2 text-sm text-gray-600">作成したゲームの一覧を確認・管理できます</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('game.gameManagement')}</h1>
+          <p className="mt-2 text-sm text-gray-600">{t('game.gameManagementDescription')}</p>
         </div>
         <a
           href="/games/create"
@@ -28,7 +34,7 @@ export function GameListPage({ games }: GameListPageProps) {
             <title>Add icon</title>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          新しいゲームを作成
+          {t('game.newGame')}
         </a>
       </div>
 
