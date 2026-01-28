@@ -6,7 +6,7 @@
 
 'use client';
 
-import { forwardRef, type SelectHTMLAttributes } from 'react';
+import { forwardRef, useEffect, useState, type SelectHTMLAttributes } from 'react';
 import { classNames } from '@/lib/design-system/classNames';
 
 export type SelectSize = 'sm' | 'md' | 'lg';
@@ -81,8 +81,16 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   },
   ref
 ) {
-  const randomId = Math.random().toString(36).substr(2, 9);
-  const selectId = id || `select-${randomId}`;
+  // Generate ID only on client side to avoid hydration mismatch
+  const [generatedId, setGeneratedId] = useState<string>('');
+
+  useEffect(() => {
+    if (!id && !generatedId) {
+      setGeneratedId(`select-${Math.random().toString(36).substring(2, 11)}`);
+    }
+  }, [id, generatedId]);
+
+  const selectId = id || generatedId || 'select';
   const helperId = helperText ? `${selectId}-helper` : undefined;
   const errorId = error && errorMessage ? `${selectId}-error` : undefined;
   const describedBy = errorId || helperId || ariaDescribedBy;

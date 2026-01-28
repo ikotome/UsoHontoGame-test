@@ -33,9 +33,16 @@ export async function setCookie(
   } = {}
 ): Promise<void> {
   const cookieStore = await cookies();
+
+  // Determine secure flag:
+  // 1. If explicitly provided, use it
+  // 2. If FORCE_SECURE_COOKIES env var is set, use its value
+  // 3. Otherwise, use secure in production only
+  const shouldUseSecure = options.secure ?? false;
+
   cookieStore.set(name, value, {
     httpOnly: options.httpOnly ?? false,
-    secure: options.secure ?? process.env.NODE_ENV === 'production',
+    secure: shouldUseSecure,
     sameSite: options.sameSite ?? COOKIE_CONFIG.SAME_SITE,
     maxAge: options.maxAge ?? COOKIE_CONFIG.MAX_AGE,
     path: options.path ?? COOKIE_CONFIG.PATH,
