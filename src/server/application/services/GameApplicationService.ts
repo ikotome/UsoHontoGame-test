@@ -7,10 +7,12 @@ import { createGameRepository } from '@/server/infrastructure/repositories';
 import { CreateGame } from '@/server/application/use-cases/games/CreateGame';
 import { UpdateGameSettings } from '@/server/application/use-cases/games/UpdateGameSettings';
 import { DeleteGame } from '@/server/application/use-cases/games/DeleteGame';
+import { GetActiveGames } from '@/server/application/use-cases/games/GetActiveGames';
 import { GetGamesByCreator } from '@/server/application/use-cases/games/GetGamesByCreator';
 import { StartAcceptingResponses } from '@/server/application/use-cases/games/StartAcceptingResponses';
 import { CloseGame } from '@/server/application/use-cases/games/CloseGame';
 import { ValidateStatusTransition } from '@/server/application/use-cases/games/ValidateStatusTransition';
+import type { GetActiveGamesResult } from '@/server/application/use-cases/games/GetActiveGames';
 import { GameId } from '@/server/domain/value-objects/GameId';
 import type { CreateGameOutput, GameManagementDto } from '@/server/application/dto/GameDto';
 import type { GameDetailDto } from '@/server/application/dto/GameDetailDto';
@@ -303,5 +305,19 @@ export class GameApplicationService {
     } catch (error) {
       return mapDomainErrorToServiceError(error, 'action.game.start.error');
     }
+  }
+
+  /**
+   * 公開中・締切ゲーム一覧取得（認証不要・TOP用）
+   * @param params cursor, limit
+   * @returns ゲーム一覧とページネーション情報
+   */
+  async getActiveGames(params: {
+    cursor?: string;
+    limit?: number;
+  } = {}): Promise<GetActiveGamesResult> {
+    const repository = createGameRepository();
+    const useCase = new GetActiveGames(repository);
+    return useCase.execute(params);
   }
 }

@@ -6,6 +6,8 @@ import { SessionServiceContainer } from '@/server/infrastructure/di/SessionServi
 import { createGameRepository } from '@/server/infrastructure/repositories';
 import { AddPresenter } from '@/server/application/use-cases/games/AddPresenter';
 import { AddPresenterWithEpisodes } from '@/server/application/use-cases/games/AddPresenterWithEpisodes';
+import { GetPresenterEpisodes } from '@/server/application/use-cases/games/GetPresenterEpisodes';
+import { GetPresentersByGameId } from '@/server/application/use-cases/games/GetPresentersByGameId';
 import { RemovePresenter } from '@/server/application/use-cases/games/RemovePresenter';
 import { AddEpisode } from '@/server/application/use-cases/games/AddEpisode';
 import type { PresenterWithLieDto } from '@/server/application/dto/PresenterWithLieDto';
@@ -149,6 +151,50 @@ export class PresenterApplicationService {
       };
     } catch (error) {
       return mapDomainErrorToServiceError(error, 'action.episode.add.error');
+    }
+  }
+
+  /**
+   * ゲームの出題者一覧取得（認可済みセッション必須）
+   * @param gameId ゲームID
+   * @returns 出題者一覧（エピソード・嘘マーク含む）
+   */
+  async getPresentersByGameId(
+    gameId: string
+  ): Promise<ServiceResponse<{ presenters: PresenterWithLieDto[] }>> {
+    try {
+      const sessionService = SessionServiceContainer.getSessionService();
+      const sessionId = await sessionService.requireCurrentSession();
+
+      const repository = createGameRepository();
+      const useCase = new GetPresentersByGameId(repository);
+      const result = await useCase.execute({ gameId, requesterId: sessionId });
+
+      return { success: true, data: { presenters: result.presenters } };
+    } catch (error) {
+      return mapDomainErrorToServiceError(error, 'action.presenter.list.error');
+    }
+  }
+
+  /**
+   * 出題者のエピソード取得（認可済みセッション必須）
+   * @param presenterId 出題者ID
+   * @returns 出題者とエピソード（嘘マーク含む）
+   */
+  async getPresenterEpisodes(
+    presenterId: string
+  ): Promise<ServiceResponse<{ presenter: PresenterWithLieDto }>> {
+    try {
+      const sessionService = SessionServiceContainer.getSessionService();
+      const sessionId = await sessionService.requireCurrentSession();
+
+      const repository = createGameRepository();
+      const useCase = new GetPresenterEpisodes(repository);
+      const result = await useCase.execute({ presenterId, requesterId: sessionId });
+
+      return { success: true, data: { presenter: result.presenter } };
+    } catch (error) {
+      return mapDomainErrorToServiceError(error, 'action.presenter.episodes.error');
     }
   }
 }
