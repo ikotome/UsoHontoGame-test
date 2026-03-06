@@ -16,6 +16,8 @@ import type { GameListPageErrorProps, GameListPageProps } from './GameListPage.t
  * Feature 008: Added i18n support
  * @param props - Component props including games data
  */
+
+
 export function GameListPage({ games }: GameListPageProps) {
   const { t } = useLanguage();
 

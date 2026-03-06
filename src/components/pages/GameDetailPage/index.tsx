@@ -12,6 +12,7 @@ import { Header } from '@/components/ui/Header';
 import { ToastContainer } from '@/components/ui/Toast';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useToast } from '@/hooks/useToast';
+import { Button } from '@/components/ui/Button';
 import type { GameStatusValue } from '@/server/domain/value-objects/GameStatus';
 import type { GameDetailPageErrorProps, GameDetailPageProps } from './GameDetailPage.types';
 import { useGameStatus } from './hooks/useGameStatus';
@@ -40,6 +41,16 @@ export function GameDetailPage({ game, currentSessionId }: GameDetailPageProps) 
     },
   });
 
+  const handleCopyUrl = async () => {
+    try {
+      const url = `${window.location.origin}/games/${game.id}`;
+      await navigator.clipboard.writeText(url);
+      showSuccess('URLをコピーしました', t('messages.success'));
+    } catch {
+      showError('URLのコピーに失敗しました', t('status.labels.error'));
+    }
+  };
+
   // Check if game can be edited (only 準備中 status)
   const canEdit = currentStatus === '準備中';
 
@@ -65,7 +76,13 @@ export function GameDetailPage({ game, currentSessionId }: GameDetailPageProps) 
                 <p className="mt-2 text-sm text-gray-600">{t('game.gameManagementDescription')}</p>
               </div>
               <div className="flex flex-col items-end space-y-3">
+                
                 <GameStatusBadge status={currentStatus} animated={true} />
+
+                <Button variant="secondary" size="sm" onClick={handleCopyUrl}>
+                  URLをコピー
+                </Button>
+
                 {/* Show start button for 準備中 (to start game) */}
                 {currentStatus === '準備中' && (
                   <button
